@@ -27,6 +27,14 @@ here is an example :
 
 ##
 
+Also work confirmed in : 
+rivo_Eday_MIROC6_ssp585_r1i1p1f1_gn_20150101-20241231.nc         
+prc_day_CanESM5_ssp126_r12i1p2f1_gn_20150101-21001231.nc                
+clt_day_CNRM-CM5_rcp85_r1i1p1_20210101-20251231.nc                   
+pr_day_CNRM-CM6-1-HR_ssp585_r1i1p1f2_gr_20150101-20391231.nc   
+
+##
+
 ## Shp file info 
 
 shp is from ArcGIS :
