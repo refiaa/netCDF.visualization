@@ -36,10 +36,11 @@ lon_max = 180
 lat_min = -90
 lat_max = 90
 
+# width, height, dpi
 resolution = (2000, 1000, 1000)  
 max_value = 1000
 
-#YYYY/MM/DD
+# YYYY/MM/DD
 start_date = '2039/01/01' 
 end_date = '2039/12/31'
 
