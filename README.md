@@ -17,9 +17,13 @@ here is an example :
 
 ## Example 
 
-![output1](https://github.com/refiaa/netCDF.visualization/assets/112306763/0950bb13-9d5d-4003-bfa2-5562b1f69afd)
-![output2](https://github.com/refiaa/netCDF.visualization/assets/112306763/785ac5da-91c7-403c-81c8-77a851c8a344)
 
+![output1](https://github.com/refiaa/netCDF.visualization/assets/112306763/0950bb13-9d5d-4003-bfa2-5562b1f69afd)
+using pr_day_CNRM-CM6-1-HR_ssp585_r1i1p1f2_gr_20150101-20391231
+
+
+![output2](https://github.com/refiaa/netCDF.visualization/assets/112306763/785ac5da-91c7-403c-81c8-77a851c8a344)
+using rivo_Eday_MIROC6_ssp585_r1i1p1f1_gn_20150101-20241231
 
 ## Shp file info 
 
