@@ -23,7 +23,7 @@ here is an example :
 
 ## Shp file info 
 
-using ArcGIS file :
+shp is from ArcGIS :
 
 Layer: World_Countries_Generalized (ID:0)
 View In:   Map Viewer
