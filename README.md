@@ -19,3 +19,33 @@ here is an example :
 
 ![output1](https://github.com/refiaa/netCDF.visualization/assets/112306763/0950bb13-9d5d-4003-bfa2-5562b1f69afd)
 ![output2](https://github.com/refiaa/netCDF.visualization/assets/112306763/785ac5da-91c7-403c-81c8-77a851c8a344)
+
+
+## Shp file info 
+
+using ArcGIS file :
+
+Layer: World_Countries_Generalized (ID:0)
+View In:   Map Viewer
+
+Name: World_Countries_Generalized
+
+Display Field:
+
+Type: Feature Layer
+
+Geometry Type: esriGeometryPolygon
+
+Description: <div style="text-align:Left;"><div><div><p><span>World Countries Generalized represents generalized boundaries for the countries of the world.</span></p></div></div></div>
+
+Copyright Text: Sources: Esri; Garmin International, Inc.; U.S. Central Intelligence Agency (The World Factbook); National Geographic Society
+
+Min. Scale: 0
+
+Max. Scale: 0
+
+Default Visibility: true
+
+Max Record Count: 2000
+
+Supported query Formats: JSON
