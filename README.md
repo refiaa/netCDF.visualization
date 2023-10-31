@@ -1,2 +1,21 @@
 # netCDF.visualization
 py code for visualize netCDF(.nc) climate file
+
+
+This is a Python code designed to output the IPCC's CMIP. It is verified to function
+with the nc datasets from CMIP5 and CMIP6. 
+
+There is a known issue when the lat values in the nc files range from -90 to 90, but this will be addressed in future updates.
+To use, input the name of the nc file and its variables in the PARAMETER, and set the desired lon and lat range. Dates can be adjusted using start_date and end_date.
+
+
+There is no netCDF file in this project. You hav to download a nc file from this kind of site : https://esgf-node.llnl.gov/search/cmip6/
+
+・using wgs84 coordinate system but you can chg shp file to use other coordination system.
+
+here is an example : 
+
+## Example 
+
+![output1](https://github.com/refiaa/netCDF.visualization/assets/112306763/0950bb13-9d5d-4003-bfa2-5562b1f69afd)
+![output2](https://github.com/refiaa/netCDF.visualization/assets/112306763/785ac5da-91c7-403c-81c8-77a851c8a344)
