@@ -5,6 +5,7 @@ import numpy as np
 import os
 import imageio.v2 as imageio
 
+from eofs.standard import Eof
 from io import BytesIO
 from shapely.geometry import box
 from datetime import datetime, timedelta
@@ -26,7 +27,7 @@ from PIL import Image
 ###########################################################################################
 
 
-#############################  NetCDF FILE PARAMETER  #####################################
+################################  NetCDF FILE VARIABLE  ###################################
 
 # nc_filename = 'rivo_Eday_MIROC6_ssp585_r1i1p1f1_gn_20150101-20241231.nc'
 # variable_name = 'rivo'
