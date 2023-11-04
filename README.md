@@ -13,7 +13,11 @@ There is no netCDF file in this project. You hav to download a nc file from this
 
 ・using wgs84 coordinate system but you can chg shp file to use other coordination system.
 
-here is an example : 
+## update list
+
+231101 : change gif creation method to optimize 
+
+
 
 ## Example 
 
