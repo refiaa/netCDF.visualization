@@ -16,6 +16,7 @@ There is no netCDF file in this project. You hav to download a nc file from this
 ## update list
 
 231101 : change gif creation method to optimize 
+231108 : change gif plotting method for better performance
 
 
 
