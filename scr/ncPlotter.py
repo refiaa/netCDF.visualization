@@ -28,24 +28,31 @@ from PIL import Image
 
 ################################# netCDF FILE VARIABLE ####################################
 
-nc_filename = 'clt_day_CNRM-CM5_rcp85_r1i1p1_20210101-20251231.nc'
-variable_name = 'clt'
+# nc_filename = 'rivo_Eday_MIROC6_ssp585_r1i1p1f1_gn_20150101-20241231.nc'
+# variable_name = 'rivo'
+nc_filename = ''
+variable_name = ''
 
-lon_min = 115
-lon_max = 155
-lat_min = 20
-lat_max = 60
+lon_min = -180
+lon_max = 180
+lat_min = -90
+lat_max = 90
 
+# width, height, dpi
 resolution = (500, 500, 800)  
-max_value = 100
+max_value = 100 
 
+# YYYY/MM/DD
 start_date = '2039/01/01'
 end_date = '2039/01/05'
 
 gif_filename = 'output.gif'
 
+# matplotlib Colormap Reference
 color_map = 'coolwarm' 
-frame_duration = 250
+
+# milliseconds
+frame_duration = 250 
 transparency = 0.7
 
 ###########################################################################################
