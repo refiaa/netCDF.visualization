@@ -88,18 +88,35 @@ def crop_map(data, lon_min, lon_max, lat_min, lat_max):
 
 def create_GIF(nc_file, gif_file_path, lon_min, lon_max, lat_min, lat_max, start_date, end_date, resolution, transparency, max_value, color_map, frame_duration, variable_name):
     dataset = nc.Dataset(nc_file)
-    
+
     lon = dataset.variables['lon'][:]
     lat = dataset.variables['lat'][:]
     
-    data = dataset.variables[variable_name][:]
-    
-    lon, lat, data = wrap_data(lon, lat, data, lon_min, lon_max, lat_min, lat_max)
-    
-    frames = []
+    time = dataset.variables['time'][:]
+    time_units = dataset.variables['time'].units
 
-    start_date = datetime.strptime(start_date, '%Y/%m/%d')
-    end_date = datetime.strptime(end_date, '%Y/%m/%d')
+    reference_date_str = time_units.split('since ')[-1]
+    reference_date = datetime.strptime(reference_date_str, "%Y-%m-%d %H:%M:%S")
+
+    dates = [reference_date + timedelta(days=int(t)) for t in time]
+    
+    file_start_date = dates[0].strftime('%Y/%m/%d')
+    file_end_date = dates[-1].strftime('%Y/%m/%d')
+    
+    print(f"Time range: {file_start_date} ~ {file_end_date}")
+
+    user_start_date_dt = datetime.strptime(start_date, '%Y/%m/%d')
+    user_end_date_dt = datetime.strptime(end_date, '%Y/%m/%d')
+
+    if user_start_date_dt < dates[0] or user_end_date_dt > dates[-1]:
+        print("Time range is out of range.")
+        return   
+
+    data = dataset.variables[variable_name][:]
+
+    lon, lat, data = wrap_data(lon, lat, data, lon_min, lon_max, lat_min, lat_max)
+
+    frames = []
 
     fig, ax = plt.subplots(figsize=(resolution[0] / 100, resolution[1] / 100))
     world.boundary.plot(ax=ax, linewidth=1, color='k')
@@ -108,22 +125,30 @@ def create_GIF(nc_file, gif_file_path, lon_min, lon_max, lat_min, lat_max, start
     colorbar = fig.colorbar(im, ax=ax, label=f'{variable_name} ({dataset.variables[variable_name].units})')
     title = ax.set_title('')
 
-    for i in range(data.shape[0]):
-        current_date = start_date + timedelta(days=i)
+    for i in range(len(dates)):
+        current_date = dates[i]
 
-        if current_date <= end_date:
+        if user_start_date_dt <= current_date <= user_end_date_dt:
             im.set_data(data[i, ::-1, :])
             title.set_text(f'Time: {current_date.strftime("%Y/%m/%d")}')
 
             with BytesIO() as buf:
                 plt.savefig(buf, format='png', dpi=resolution[2], bbox_inches='tight')
                 buf.seek(0)
+                
                 frame = Image.open(buf)
                 frame = frame.resize(resolution[:2])
                 frames.append(frame)
 
-    frames[0].save(gif_file_path, save_all=True, append_images=frames[1:], duration=frame_duration, loop=0)
-    plt.close(fig)  
+    if frames:
+        frames[0].save(gif_file_path, save_all=True, append_images=frames[1:], duration=frame_duration, loop=0)
+        
+    else:
+        print("No frames generated within the specified date range.")
+
+    plt.close(fig)
+
+    dataset.close()
     
 try:
     world = gpd.read_file('./shp/World_Countries_Generalized.shp')
@@ -138,4 +163,3 @@ nc_file = os.path.join(BASE_NC_DIR, nc_filename)
 gif_file_path = os.path.join(BASE_GIF_DIR, gif_filename)
 
 create_GIF(nc_file, gif_file_path, lon_min, lon_max, lat_min, lat_max, start_date, end_date, resolution, transparency, max_value, color_map, frame_duration, variable_name)
-
