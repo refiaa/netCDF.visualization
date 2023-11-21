@@ -4,6 +4,7 @@ import netCDF4 as nc
 import numpy as np
 import os
 import imageio.v2 as imageio
+import winsound as ws
 
 from eofs.standard import Eof
 from io import BytesIO
