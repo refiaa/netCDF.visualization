@@ -28,10 +28,34 @@ from PIL import Image
 
 ################################# netCDF FILE VARIABLE ####################################
 
-# nc_filename = 'rivo_Eday_MIROC6_ssp585_r1i1p1f1_gn_20150101-20241231.nc'
-# variable_name = 'rivo'
-nc_filename = ''
-variable_name = ''
+nc_filenames = [ 
+    'pr_day_CanESM5_ssp585_r1i1p1f1_gn_20150101-21001231.nc',
+    'pr_day_CNRM-CM6-1_ssp585_r1i1p1f2_gr_20150101-21001231.nc',
+    'pr_day_CNRM-ESM2-1_ssp585_r1i1p1f2_gr_20150101-21001231.nc',
+    'pr_day_GFDL-ESM4_ssp585_r1i1p1f1_gr1_20150101-20341231.nc',
+    'pr_day_INM-CM4-8_ssp585_r1i1p1f1_gr1_20150101-20641231.nc',
+    'pr_day_INM-CM5-0_ssp585_r1i1p1f1_gr1_20150101-20641231.nc',
+    'pr_day_MIROC6_ssp585_r1i1p1f1_gn_20150101-20241231.nc',
+    'pr_day_MPI-ESM1-2-HR_ssp585_r1i1p1f1_gn_20150101-20191231.nc',
+    # 'pr_day_MPI-ESM1-2-HR_ssp585_r1i1p1f1_gn_20200101-20241231.nc',
+    'pr_day_MPI-ESM1-2-LR_ssp585_r1i1p1f1_gn_20150101-20341231.nc',
+    'pr_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_20150101-20491230.nc'
+]
+
+gif_filenames = [
+    '2015_Jan_CanESM5.gif',
+    '2015_Jan_CNRM-CM6-1.gif',
+    '2015_Jan_CNRM-ESM2-1.gif',
+    '2015_Jan_GFDL-ESM4.gif',
+    '2015_Jan_INM-CM4-8.gif',
+    '2015_Jan_INM-CM5-0.gif',
+    '2015_Jan_MIROC6.gif',
+    '2015_Jan_MPI-ESM1-2-HR.gif',
+    '2015_Jan_MPI-ESM1-2-LR.gif',
+    '2015_Jan_UKESM1-0-LL.gif',
+]
+
+variable_name = 'pr'
 
 lon_min = -180
 lon_max = 180
@@ -39,12 +63,12 @@ lat_min = -90
 lat_max = 90
 
 # width, height, dpi
-resolution = (500, 500, 800)  
+resolution = (1000, 500, 800)  
 max_value = 100 
 
 # YYYY/MM/DD
 start_date = '2039/01/01'
-end_date = '2039/01/05'
+end_date = '2039/12/31'
 
 gif_filename = 'output.gif'
 
@@ -95,7 +119,11 @@ def create_GIF(nc_file, gif_file_path, lon_min, lon_max, lat_min, lat_max, start
     time = dataset.variables['time'][:]
     time_units = dataset.variables['time'].units
 
-    reference_date_str = time_units.split('since ')[-1]
+    reference_date_str = time_units.split('since ')[-1].split('.')[0]
+
+    if len(reference_date_str.split()) == 1:
+        reference_date_str += " 00:00:00"
+
     reference_date = datetime.strptime(reference_date_str, "%Y-%m-%d %H:%M:%S")
 
     dates = [reference_date + timedelta(days=int(t)) for t in time]
@@ -159,7 +187,13 @@ except Exception as e:
 BASE_NC_DIR = './nc/'
 BASE_GIF_DIR = './plot/'
 
-nc_file = os.path.join(BASE_NC_DIR, nc_filename)
-gif_file_path = os.path.join(BASE_GIF_DIR, gif_filename)
+for nc_filename, gif_filename in zip(nc_filenames, gif_filenames):
+    nc_file = os.path.join(BASE_NC_DIR, nc_filename)
+    gif_file_path = os.path.join(BASE_GIF_DIR, gif_filename)
 
-create_GIF(nc_file, gif_file_path, lon_min, lon_max, lat_min, lat_max, start_date, end_date, resolution, transparency, max_value, color_map, frame_duration, variable_name)
+    create_GIF(nc_file, gif_file_path, lon_min, lon_max, lat_min, lat_max, start_date, end_date, resolution, transparency, max_value, color_map, frame_duration, variable_name)
+    
+    frequency = 2500  
+    duration = 1000  
+
+    ws.Beep(frequency, duration)

@@ -21,6 +21,8 @@ There is no netCDF file in this project. You hav to download a nc file from this
 
 231111 : Fixed an issue that the code fail to extract data from the specified date range
 
+231121 : Now Can handle mulfi-file in one time
+
 ## Example 
 
 ### using pr_day_CNRM-CM6-1-HR_ssp585_r1i1p1f2_gr_20150101-20391231
