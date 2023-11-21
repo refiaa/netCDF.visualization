@@ -22,7 +22,8 @@ from PIL import Image
 #                                                                                         #
 #                                      !NOTICE!                                           #
 #                                                                                         #
-#            ***DATA WILL NOT SHOW PROPERLY WHEN LON RANGE IS NOT -90 to 90***            #
+#           *** DATA WILL NOT SHOW PROPERLY WHEN LON RANGE IS NOT -90 to 90 ***           #
+#          *** NEVER SET lon RANGE -180 to 180 after 231121 commited version ***          #
 #                                                                                         #
 ###########################################################################################
 
