@@ -23,6 +23,10 @@ There is no netCDF file in this project. You hav to download a nc file from this
 
 231121 : Now Can handle mulfi-file in one time・Time value error fixed
 
+!!!!! HAV AN ERROR ON PLOTTING WORLD-WIDE SIZE MAP IN 231121 COMMITED VERSION !!!!!
+HAV TO FIX
+
+
 ## Example 
 
 ### using pr_day_CNRM-CM6-1-HR_ssp585_r1i1p1f2_gr_20150101-20391231
