@@ -21,7 +21,7 @@ There is no netCDF file in this project. You hav to download a nc file from this
 
 231111 : Fixed an issue that the code fail to extract data from the specified date range
 
-231121 : Now Can handle mulfi-file in one time
+231121 : Now Can handle mulfi-file in one time・Time value error fixed
 
 ## Example 
 
