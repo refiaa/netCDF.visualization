@@ -30,47 +30,20 @@ from PIL import Image
 
 ################################# netCDF FILE VARIABLE ####################################
 
-nc_filenames = [ 
-    'pr_day_CanESM5_ssp585_r1i1p1f1_gn_20150101-21001231.nc',
-    'pr_day_CNRM-CM6-1_ssp585_r1i1p1f2_gr_20150101-21001231.nc',
-    'pr_day_CNRM-ESM2-1_ssp585_r1i1p1f2_gr_20150101-21001231.nc',
-    'pr_day_GFDL-ESM4_ssp585_r1i1p1f1_gr1_20150101-20341231.nc',
-    'pr_day_INM-CM4-8_ssp585_r1i1p1f1_gr1_20150101-20641231.nc',
-    'pr_day_INM-CM5-0_ssp585_r1i1p1f1_gr1_20150101-20641231.nc',
-    'pr_day_MIROC6_ssp585_r1i1p1f1_gn_20150101-20241231.nc',
-    'pr_day_MPI-ESM1-2-HR_ssp585_r1i1p1f1_gn_20150101-20191231.nc',
-    # 'pr_day_MPI-ESM1-2-HR_ssp585_r1i1p1f1_gn_20200101-20241231.nc',
-    'pr_day_MPI-ESM1-2-LR_ssp585_r1i1p1f1_gn_20150101-20341231.nc',
-    'pr_day_UKESM1-0-LL_ssp585_r1i1p1f2_gn_20150101-20491230.nc'
-]
+variable_name = 'r1d'
 
-gif_filenames = [
-    '2015_Jan_CanESM5.gif',
-    '2015_Jan_CNRM-CM6-1.gif',
-    '2015_Jan_CNRM-ESM2-1.gif',
-    '2015_Jan_GFDL-ESM4.gif',
-    '2015_Jan_INM-CM4-8.gif',
-    '2015_Jan_INM-CM5-0.gif',
-    '2015_Jan_MIROC6.gif',
-    '2015_Jan_MPI-ESM1-2-HR.gif',
-    '2015_Jan_MPI-ESM1-2-LR.gif',
-    '2015_Jan_UKESM1-0-LL.gif',
-]
-
-variable_name = 'pr'
-
-lon_min = -180
-lon_max = 180
-lat_min = -90
-lat_max = 90
+lon_min = 120
+lon_max = 150
+lat_min = 22.40
+lat_max = 47.60
 
 # width, height, dpi
-resolution = (1000, 500, 800)  
-max_value = 100 
+resolution = (1190, 1000, 800)  
+max_value = 15
 
 # YYYY/MM/DD
-start_date = '2039/01/01'
-end_date = '2039/12/31'
+start_date = '2015/01/01'
+end_date = '2015/01/01'
 
 gif_filename = 'output.gif'
 
@@ -108,24 +81,23 @@ def wrap_data(lon, lat, data, lon_min, lon_max, lat_min, lat_max):
     wrapped_data = wrapped_data[:, :, lon_mask]
 
     return wrapped_lon[sorted_indices_lon][lon_mask], lat_1d[lat_mask], wrapped_data
-
 def crop_map(data, lon_min, lon_max, lat_min, lat_max):
     return data.cx[lon_min:lon_max, lat_min:lat_max]
 
-def create_GIF(nc_file, gif_file_path, lon_min, lon_max, lat_min, lat_max, start_date, end_date, resolution, transparency, max_value, color_map, frame_duration, variable_name):
+def convert_to_date(time_val, year):
+    return datetime(year, 1, 1) + timedelta(days=time_val - 1)
+
+def create_GIF(nc_file, gif_file_path, file_name, lon_min, lon_max, lat_min, lat_max, start_date, end_date, resolution, transparency, max_value, color_map, frame_duration, variable_name):
     dataset = nc.Dataset(nc_file)
 
     lon = dataset.variables['lon'][:]
     lat = dataset.variables['lat'][:]
-    
     time = dataset.variables['time'][:]
     time_units = dataset.variables['time'].units
 
     reference_date_str = time_units.split('since ')[-1].split('.')[0]
-
     if len(reference_date_str.split()) == 1:
         reference_date_str += " 00:00:00"
-
     reference_date = datetime.strptime(reference_date_str, "%Y-%m-%d %H:%M:%S")
 
     dates = [reference_date + timedelta(days=int(t)) for t in time]
@@ -133,15 +105,16 @@ def create_GIF(nc_file, gif_file_path, lon_min, lon_max, lat_min, lat_max, start
     file_start_date = dates[0].strftime('%Y/%m/%d')
     file_end_date = dates[-1].strftime('%Y/%m/%d')
     
-    print(f"Time range: {file_start_date} ~ {file_end_date}")
+    print(f"Processing file: {file_name}")
+    print(f"Time Range: {file_start_date} ~ {file_end_date}")
 
     user_start_date_dt = datetime.strptime(start_date, '%Y/%m/%d')
     user_end_date_dt = datetime.strptime(end_date, '%Y/%m/%d')
 
     if user_start_date_dt < dates[0] or user_end_date_dt > dates[-1]:
         print("Time range is out of range.")
-        return   
-
+        return
+    
     data = dataset.variables[variable_name][:]
 
     lon, lat, data = wrap_data(lon, lat, data, lon_min, lon_max, lat_min, lat_max)
@@ -186,16 +159,31 @@ try:
 except Exception as e:
     print(f"Fail to load shapefile: {str(e)}")
 
-BASE_NC_DIR = './nc/'
-BASE_GIF_DIR = './plot/'
+def scan_directory(directory_path):
+    nc_files = []
+    for file in os.listdir(directory_path):
+        if file.endswith('.nc'):
+            nc_files.append(file)
+    return nc_files
 
-for nc_filename, gif_filename in zip(nc_filenames, gif_filenames):
-    nc_file = os.path.join(BASE_NC_DIR, nc_filename)
-    gif_file_path = os.path.join(BASE_GIF_DIR, gif_filename)
+def generate_output_filename(input_filename):
+    base_filename = input_filename.rsplit('.', 1)[0]
+    return base_filename + '.gif'
 
-    create_GIF(nc_file, gif_file_path, lon_min, lon_max, lat_min, lat_max, start_date, end_date, resolution, transparency, max_value, color_map, frame_duration, variable_name)
-    
-    frequency = 2500  
-    duration = 1000  
+def main():
+    directory_path = './nc/' 
+    nc_files = scan_directory(directory_path) 
 
-    ws.Beep(frequency, duration)
+    for file_name in nc_files:
+        nc_file = os.path.join(directory_path, file_name)
+        gif_filename = generate_output_filename(file_name)
+        gif_file_path = os.path.join('./plot/', gif_filename)
+
+        create_GIF(nc_file, gif_file_path, file_name, lon_min, lon_max, lat_min, lat_max, start_date, end_date, resolution, transparency, max_value, color_map, frame_duration, variable_name)
+
+        frequency = 2500  
+        duration = 500
+        ws.Beep(frequency, duration)
+
+if __name__ == "__main__":
+    main()
